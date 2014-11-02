@@ -1,5 +1,99 @@
 <?import javafx.scene.layout.GridPane?>
-<GridPane fx:controller="ru.kpfu.ildar.Controller" xmlns:fx="http://javafx.com/fxml"
-        hgap="10" vgap="10" alignment="center">
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<GridPane fx:controller="ru.kpfu.ildar.fx.Controller" xmlns:fx="http://javafx.com/fxml"
+        hgap="10">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100" />
+    </columnConstraints>
+
+    <MenuBar GridPane.rowIndex="0">
+        <Menu text="File">
+            <SeparatorMenuItem />
+            <MenuItem onAction="#exitClicked" text="Exit" />
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About" onAction="#aboutClicked" />
+        </Menu>
+    </MenuBar>
+
+    <HBox spacing="10" prefHeight="50" GridPane.rowIndex="1">
+        <!-- Add to list; remove from list; open downloaded file path; parameters; statistics -->
+        <Button onAction="#addToListClicked">
+            <tooltip><Tooltip text="Download new file" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/add.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="removeFromListBtn" onAction="#removeFromListClicked" disable="true">
+            <tooltip><Tooltip text="Remove the file from the list" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/delete.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="openFilePathBtn" onAction="#openFilePathClicked" disable="true">
+            <tooltip><Tooltip text="Open file saved path" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/open.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button onAction="#paramsClicked">
+            <tooltip><Tooltip text="Open Parameters window" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/params.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button onAction="#statisticsClicked">
+            <tooltip><Tooltip text="Open Statistics window" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/statistics.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <TableView fx:id="filesView" editable="false"
+            GridPane.rowIndex="2">
+        <placeholder>
+            <Label text="No files in list yet" />
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="urlCol" text="File URL" minWidth="200" />
+            <TableColumn fx:id="fileNameCol" text="File name" minWidth="200" />
+            <TableColumn fx:id="progressCol" text="Progress" minWidth="200" />
+            <TableColumn fx:id="speedCol" text="Speed" minWidth="100" />
+            <TableColumn fx:id="stateCol" text="State" minWidth="100" />
+        </columns>
+    </TableView>
 
 </GridPane>

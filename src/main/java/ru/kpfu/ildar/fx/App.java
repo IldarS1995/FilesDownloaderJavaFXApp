@@ -1,4 +1,4 @@
-package ru.kpfu.ildar;
+package ru.kpfu.ildar.fx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +16,11 @@ public class App extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
+        Controller.stage = stage;
         stage.setTitle("Files Downloading Application");
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        stage.setScene(new Scene(root, 700, 500));
+        stage.setScene(new Scene(root, 850, 500));
         stage.show();
     }
 }
