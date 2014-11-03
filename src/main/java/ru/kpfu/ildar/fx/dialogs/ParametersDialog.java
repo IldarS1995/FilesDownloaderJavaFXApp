@@ -24,6 +24,7 @@ public class ParametersDialog extends Dialog
     private Parameters parameters;
 
     public Action getSubmitAction() { return submitAction; }
+    public Parameters getParameters() { return parameters; }
 
     public ParametersDialog(Object owner, String title, Parameters parameters)
     {
@@ -78,10 +79,7 @@ public class ParametersDialog extends Dialog
             @Override
             public void handle(ActionEvent evt)
             {
-                parameters.setMaxThreadsAmount(getThreadsCount());
-                parameters.setBytesPerSec(getBytesPerSec());
-                parameters.setFolderForFiles(getFolderForFiles());
-
+                parameters = new Parameters(getThreadsCount(), getBytesPerSec(), getFolderForFiles());
                 Dialog dial = (Dialog)evt.getSource();
                 dial.hide();
             }

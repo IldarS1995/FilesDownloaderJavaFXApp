@@ -40,6 +40,16 @@
                 </ImageView>
             </graphic>
         </Button>
+        <Button onAction="#addMultipleClicked">
+            <tooltip><Tooltip text="Download multiple files" /></tooltip>
+            <graphic>
+                <ImageView fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/downloads.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="removeFromListBtn" onAction="#removeFromListClicked" disable="true">
             <tooltip><Tooltip text="Remove the file from the list" /></tooltip>
             <graphic>
@@ -90,8 +100,9 @@
         <columns>
             <TableColumn fx:id="urlCol" text="File URL" minWidth="200" />
             <TableColumn fx:id="fileNameCol" text="File name" minWidth="200" />
-            <TableColumn fx:id="progressCol" text="Progress" minWidth="200" />
-            <TableColumn fx:id="speedCol" text="Speed" minWidth="100" />
+            <TableColumn fx:id="progressCol" text="Progress(in %)" minWidth="200" />
+            <TableColumn fx:id="sizeCol" text="Size(in MBs)" minWidth="75" />
+            <TableColumn fx:id="speedCol" text="Speed(in KBps)" minWidth="100" />
             <TableColumn fx:id="stateCol" text="State" minWidth="100" />
         </columns>
     </TableView>

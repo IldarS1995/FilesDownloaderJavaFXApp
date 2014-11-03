@@ -8,6 +8,7 @@ public class ListFile
 {
     private SimpleStringProperty url;
     private SimpleStringProperty fileName;
+    private SimpleDoubleProperty size;
     private SimpleDoubleProperty progress;
     private SimpleDoubleProperty speed;
     private SimpleStringProperty state;
@@ -16,6 +17,7 @@ public class ListFile
     {
         this.url = new SimpleStringProperty(url);
         this.fileName = new SimpleStringProperty(fileName);
+        this.size = new SimpleDoubleProperty(Double.NaN);
         this.progress = new SimpleDoubleProperty(0.0);
         this.speed = new SimpleDoubleProperty(0.0);
         this.state = new SimpleStringProperty(LinkFile.State.NotStarted.toString());
@@ -73,5 +75,15 @@ public class ListFile
     public void setState(LinkFile.State state)
     {
         this.state.set(state.toString());
+    }
+
+    public double getSize()
+    {
+        return size.get();
+    }
+
+    public void setSize(double size)
+    {
+        this.size.set(size == Double.NaN ? -1.0 : size);
     }
 }

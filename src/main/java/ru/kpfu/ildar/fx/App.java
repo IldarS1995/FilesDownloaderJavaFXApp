@@ -20,7 +20,7 @@ public class App extends Application
         stage.setTitle("Files Downloading Application");
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        stage.setScene(new Scene(root, 850, 500));
+        stage.setScene(new Scene(root, 875, 500));
         stage.show();
     }
 }

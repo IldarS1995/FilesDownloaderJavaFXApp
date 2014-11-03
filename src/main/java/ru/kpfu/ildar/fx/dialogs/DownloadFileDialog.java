@@ -76,7 +76,6 @@ public class DownloadFileDialog extends Dialog
         });
 
         ButtonBar.setType(submitAction, ButtonBar.ButtonType.OK_DONE);
-
         this.getActions().addAll(Actions.CANCEL, submitAction);
         this.setResizable(false);
         this.setContent(root);
