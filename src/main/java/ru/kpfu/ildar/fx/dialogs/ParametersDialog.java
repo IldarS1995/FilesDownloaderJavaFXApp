@@ -18,9 +18,12 @@ import ru.kpfu.ildar.download.Parameters;
 
 import java.io.File;
 
+/** Dialog where user can change some downloading parameters */
 public class ParametersDialog extends Dialog
 {
+    /** Submit type button action */
     private Action submitAction;
+    /** New Parameters instance will be constructed with this dialog */
     private Parameters parameters;
 
     public Action getSubmitAction() { return submitAction; }
@@ -32,10 +35,14 @@ public class ParametersDialog extends Dialog
         this.parameters = parameters;
     }
 
+    /** Field that shows max threads amount parameter */
     private TextField threadsField;
+    /** Field that shows speed limit parameter */
     private TextField speedField;
+    /** Field that shows a folder path where downloaded files will be stored */
     private TextField saveFolderField;
-    private ComboBox<String> box;
+    /** Combo box that has three values - bytes, KBs, and MBs. User chooses them to change speed limit */
+    private ComboBox<String> speedMeasureBox;
 
     public Action showDialog()
     {
@@ -55,31 +62,32 @@ public class ParametersDialog extends Dialog
         Button browseBtn = new Button("...");
         browseBtn.setOnAction((evt) ->
         {
+            /** User can select file save folder with this browsing window */
             DirectoryChooser chooser = new DirectoryChooser();
             File dir = chooser.showDialog(this.getWindow());
             if(dir != null)
                 saveFolderField.setText(dir.getAbsolutePath());
         });
 
-        box = new ComboBox<>();
-        box.setItems(FXCollections.observableArrayList("bytes", "KBs", "MBs"));
+        speedMeasureBox = new ComboBox<>();
+        speedMeasureBox.setItems(FXCollections.observableArrayList("bytes", "KBs", "MBs"));
         int speed = parameters.getBytesPerSec();
         if(speed % 1024 == 0)
         {
             if((speed / 1024) % 1024 == 0)
             {
-                box.getSelectionModel().select("MBs");
+                speedMeasureBox.getSelectionModel().select("MBs");
                 speedField.setText(String.valueOf(speed / 1024 / 1024));
             }
             else
             {
-                box.getSelectionModel().select("KBs");
+                speedMeasureBox.getSelectionModel().select("KBs");
                 speedField.setText(String.valueOf(speed / 1024));
             }
         }
         else
         {
-            box.getSelectionModel().select("bytes");
+            speedMeasureBox.getSelectionModel().select("bytes");
             speedField.setText(String.valueOf(speed));
         }
 
@@ -87,7 +95,7 @@ public class ParametersDialog extends Dialog
         root.add(threadsField, 1, 0);
         root.add(speedLabel, 0, 1);
         root.add(speedField, 1, 1);
-        root.add(box, 2, 1);
+        root.add(speedMeasureBox, 2, 1);
         root.add(saveFolderLabel, 0, 2);
         root.add(saveFolderField, 1, 2);
         root.add(browseBtn, 2, 2);
@@ -104,6 +112,8 @@ public class ParametersDialog extends Dialog
             }
         };
 
+        /** Enable submit action button only when threads field and speed field values have
+         * correct format */
         submitAction.disabledProperty().bind(new BooleanBinding()
         {
             { super.bind(threadsField.textProperty(), speedField.textProperty()); }
@@ -134,14 +144,18 @@ public class ParametersDialog extends Dialog
         return this.show();
     }
 
+    /** Returns correctly formatted folder where files are saved */
     private String getFolderForFiles()
     {
-        return saveFolderField.getText().replace("/", File.separator).replace("\\", File.separator);
-    }
+        String res = saveFolderField.getText().replace("/", File.separator)
+                .replace("\\", File.separator);
+        return res.charAt(res.length() - 1) == File.separator.charAt(0) ? res : res.concat(File.separator);
+}
 
+    /** Returns speed limit in bytes per second */
     private int getBytesPerSec()
     {
-        String val = box.getSelectionModel().getSelectedItem();
+        String val = speedMeasureBox.getSelectionModel().getSelectedItem();
         int koeff = koeff = val.equals("bytes") ? 1 : (val.equals("KBs") ? 1024 : 1024 * 1024);
 
         int speed = Integer.parseInt(speedField.getText()) * koeff;
@@ -150,6 +164,7 @@ public class ParametersDialog extends Dialog
         return speed;
     }
 
+    /** Returns max threads count */
     private int getThreadsCount()
     {
         int threadsCount = Integer.parseInt(threadsField.getText());

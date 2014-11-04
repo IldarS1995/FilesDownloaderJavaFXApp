@@ -1,13 +1,18 @@
 package ru.kpfu.ildar.fx.pojos;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
+/** Class for storing some statistical variables */
 public class Statistics implements Serializable
 {
     //Amount of MBs, downloaded in: last day, last week, all time
     //Amount of files, downloaded in: last day, last week, all time
     //Average size of files
     //Average speed
+    private Calendar lastDay;
+    private Calendar lastWeek;
+
     private double mbsLastDay;
     private double mbsLastWeek;
     private double mbsAllTime;
@@ -16,18 +21,41 @@ public class Statistics implements Serializable
     private int filesCountLastWeek;
     private int filesCountAllTime;
 
-    private double averageFilesSize;
-    private double averageSpeed;
+    private double downloadSpeedSum;
+    private int speedMeasuresCount;
 
-    public Statistics() { }
-    public Statistics(double mbsLastDay, double mbsLastWeek, double mbsAllTime,
-                      double averageFilesSize, double averageSpeed)
+    public Statistics()
     {
-        this.mbsLastDay = mbsLastDay;
-        this.mbsLastWeek = mbsLastWeek;
-        this.mbsAllTime = mbsAllTime;
-        this.averageFilesSize = averageFilesSize;
-        this.averageSpeed = averageSpeed;
+        Calendar today = Calendar.getInstance();
+        if(lastDay == null)
+            lastDay = today;
+        if(lastWeek == null)
+            lastWeek = today;
+        if(!equalsDates(today, lastDay)) //If day has changed, set new day and reset variables
+        {
+            lastDay = today;
+            mbsLastDay = 0.0;
+            filesCountLastDay = 0;
+        }
+        if(!equalWeeks(today, lastWeek))//If week has changed, set new week and reset variables
+        {
+            lastWeek = today;
+            mbsLastWeek = 0.0;
+            filesCountLastWeek = 0;
+        }
+    }
+
+    private boolean equalWeeks(Calendar today, Calendar thatDay)
+    {
+        return today.get(Calendar.YEAR) == thatDay.get(Calendar.YEAR)
+                && today.get(Calendar.WEEK_OF_YEAR) == thatDay.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    private boolean equalsDates(Calendar today, Calendar lastDay)
+    {
+        return today.get(Calendar.YEAR) == lastDay.get(Calendar.YEAR)
+                && today.get(Calendar.MONTH) == lastDay.get(Calendar.MONTH)
+                && today.get(Calendar.DAY_OF_MONTH) == lastDay.get(Calendar.DAY_OF_MONTH);
     }
 
     public int getFilesCountLastDay()
@@ -84,21 +112,21 @@ public class Statistics implements Serializable
         this.mbsAllTime = mbsAllTime;
     }
 
-    public double getAverageFilesSize()
+    public double getDownloadSpeedSum()
     {
-        return averageFilesSize;
+        return downloadSpeedSum;
     }
-    public void setAverageFilesSize(double averageFilesSize)
+    public void setDownloadSpeedSum(double downloadSpeedSum)
     {
-        this.averageFilesSize = averageFilesSize;
+        this.downloadSpeedSum = downloadSpeedSum;
     }
 
-    public double getAverageSpeed()
+    public int getSpeedMeasuresCount()
     {
-        return averageSpeed;
+        return speedMeasuresCount;
     }
-    public void setAverageSpeed(double averageSpeed)
+    public void setSpeedMeasuresCount(int speedMeasuresCount)
     {
-        this.averageSpeed = averageSpeed;
+        this.speedMeasuresCount = speedMeasuresCount;
     }
 }

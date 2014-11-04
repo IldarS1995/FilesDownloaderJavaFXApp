@@ -12,14 +12,21 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.geometry.Insets?>
 <GridPane fx:controller="ru.kpfu.ildar.fx.Controller" xmlns:fx="http://javafx.com/fxml"
-        hgap="10">
+        hgap="10" vgap="5">
+    <padding><Insets bottom="15" /></padding>
     <columnConstraints>
         <ColumnConstraints percentWidth="100" />
     </columnConstraints>
 
     <MenuBar GridPane.rowIndex="0">
         <Menu text="File">
+            <MenuItem text="Download new file..." onAction="#addToListClicked" />
+            <MenuItem text="Download many files..." onAction="#addMultipleClicked" />
+            <SeparatorMenuItem />
+            <MenuItem text="Downloading parameters" onAction="#paramsClicked" />
+            <MenuItem text="Statistics" onAction="#statisticsClicked" />
             <SeparatorMenuItem />
             <MenuItem onAction="#exitClicked" text="Exit" />
         </Menu>
@@ -92,8 +99,8 @@
         </Button>
     </HBox>
 
-    <TableView fx:id="filesView" editable="false"
-            GridPane.rowIndex="2">
+    <TableView fx:id="filesView" editable="false" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"
+            onMouseClicked="#viewMouseClicked">
         <placeholder>
             <Label text="No files in list yet" />
         </placeholder>

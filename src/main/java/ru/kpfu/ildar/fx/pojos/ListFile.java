@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import ru.kpfu.ildar.LinkFile;
 
+/** Represents convenient files object for linking with TableView in main window */
 public class ListFile
 {
     private SimpleStringProperty url;

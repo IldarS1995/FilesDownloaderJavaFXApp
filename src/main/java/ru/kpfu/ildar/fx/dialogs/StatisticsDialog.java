@@ -21,6 +21,11 @@ public class StatisticsDialog extends Dialog
         this.statistics = statistics;
     }
 
+    private double floor(double a)
+    {
+        return (int)(a * 100) / 100.0;
+    }
+
     public void showDialog()
     {
         //Amount of MBs, downloaded in: last day, last week, all time
@@ -38,8 +43,10 @@ public class StatisticsDialog extends Dialog
 
         Text mbsDownloadedText = new Text(String.valueOf(statistics.getMbsLastDay()));
         Text filesDownloadedText = new Text(String.valueOf(statistics.getFilesCountLastDay()));
-        Text averSizeText = new Text(String.valueOf(statistics.getAverageFilesSize()));
-        Text averSpeedText = new Text(String.valueOf(statistics.getAverageSpeed()));
+        Text averSizeText = new Text(String.valueOf
+                (floor(statistics.getMbsAllTime() / statistics.getFilesCountAllTime())));
+        Text averSpeedText = new Text(String.valueOf
+                (floor(statistics.getDownloadSpeedSum() / statistics.getSpeedMeasuresCount())));
 
         String[] strs = { "Last day", "Last week", "All time" };
         ComboBox<String> mbsBox = new ComboBox<>(FXCollections.observableArrayList(strs));

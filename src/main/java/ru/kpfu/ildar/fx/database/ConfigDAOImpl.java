@@ -5,9 +5,12 @@ import ru.kpfu.ildar.fx.pojos.Statistics;
 
 import java.io.*;
 
+/** Implementation that uses serialization into files as a database option */
 public class ConfigDAOImpl implements ConfigDAO
 {
+    /** Path to the file where statistics object is stored */
     private static final String statPath = "stat.db";
+    /** Path to the file where parameters object is stored */
     private static final String paramsPath = "params.db";
 
     @Override
@@ -32,6 +35,8 @@ public class ConfigDAOImpl implements ConfigDAO
         }
         catch(IOException | ClassNotFoundException exc)
         {
+            //Some problem happened while trying to fetch an object from the file.
+            //Remove corrupted file.
             fl.delete();
             return new Statistics();
         }
@@ -59,6 +64,8 @@ public class ConfigDAOImpl implements ConfigDAO
         }
         catch(IOException | ClassNotFoundException exc)
         {
+            //Some problem happened while trying to fetch an object from the file.
+            //Remove corrupted file.
             fl.delete();
             return new Parameters();
         }

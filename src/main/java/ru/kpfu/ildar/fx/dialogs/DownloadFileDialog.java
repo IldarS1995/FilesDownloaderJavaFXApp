@@ -17,14 +17,19 @@ import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import ru.kpfu.ildar.LinkFile;
 
+/** Dialog where user chooses a file url and saving name to download it */
 public class DownloadFileDialog extends Dialog
 {
+    /** This constructed object will be returned to the calling code */
     private LinkFile file;
+    /** Folder where files are saved when downloaded. This will be shown to user in window. */
     private String savePath;
+    /** 'Download' button action */
     private Action submitAction;
 
     public Action getSubmitAction() { return submitAction; }
 
+    /** Get the file that user has entered */
     public LinkFile getFile() { return file; }
 
     public DownloadFileDialog(Object owner, String title, String savePath)
@@ -41,8 +46,8 @@ public class DownloadFileDialog extends Dialog
         Label urlLabel = new Label("Enter file URL:");
         Label nameLabel = new Label("Enter file save name:");
 
-        TextField urlField = new TextField();
-        TextField nameField = new TextField();
+        TextField urlField = new TextField();  //URL will be entered here
+        TextField nameField = new TextField(); //Downloaded file name will be entered here
 
         Text folderText = new Text("Your file will be downloaded to the folder: ");
         folderText.setFont(Font.font("Arial Narrow", 14));
@@ -61,13 +66,16 @@ public class DownloadFileDialog extends Dialog
             @Override
             public void handle(ActionEvent evt)
             {
+                //Construct LinkFile object and close this dialog
                 file = new LinkFile(urlField.getText(), nameField.getText());
                 Dialog d = (Dialog)evt.getSource();
                 d.hide();
             }
         };
+        //Disable submit button at first so the user can't click it without entering URL and file name
         submitAction.disabledProperty().set(true);
 
+        //Enable submit button only when both fields have some entered data
         submitAction.disabledProperty().bind(new BooleanBinding()
         {
             { super.bind(nameField.textProperty(), urlField.textProperty()); }

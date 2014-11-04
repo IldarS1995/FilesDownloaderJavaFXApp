@@ -23,14 +23,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+/** Dialog where user can select a file with multiple links.
+ * The application will download them all. */
 public class MultipleFilesDialog extends Dialog
 {
+    /** Files that will be returned to calling code */
     private Map<String, String> files;
+    /** Submit button action - user clicks it when he submits the downloading of selected files */
     private Action submitAction;
 
+    /** Internal list where parsed data is stored. Will be linked to the TableView instance. */
     private ObservableList<FileUrlName> list = FXCollections.observableArrayList();
 
+    /** Get parsed files - keys are URLs, and values are files save names */
     public Map<String, String> getFiles() { return files; }
+    /** Get 'Submit' type button action */
     public Action getSubmitAction() { return submitAction; }
 
     public MultipleFilesDialog(Object owner, String title)
@@ -38,6 +45,7 @@ public class MultipleFilesDialog extends Dialog
         super(owner, title);
     }
 
+    /** Internal file for linking with TableView */
     public static class FileUrlName
     {
         private SimpleStringProperty url;
@@ -64,6 +72,7 @@ public class MultipleFilesDialog extends Dialog
         filePathField.setPromptText("Enter the path to the file");
 
         Button browseBtn = new Button("...");
+        //File browsing window opens when clicked; the selected file is a file to parse.
         browseBtn.setOnAction((evt) ->
         {
             FileChooser chooser = new FileChooser();
@@ -73,6 +82,8 @@ public class MultipleFilesDialog extends Dialog
         });
 
         Button parseBtn = new Button("Parse file");
+        //Make at first disabled so the user can't click it without specifying a file at first
+        parseBtn.setDisable(true);
 
         TableView<FileUrlName> view = new TableView<>();
         TableColumn urlCol = new TableColumn("URL");
@@ -93,18 +104,26 @@ public class MultipleFilesDialog extends Dialog
 
         view.setItems(list);
 
+        //Enable Parse button only when file path field has some text
+        filePathField.textProperty().addListener((obs, oldVal, newVal) ->
+        {
+            parseBtn.setDisable(newVal.length() == 0);
+        });
+
         parseBtn.setOnAction((evt) ->
         {
             Map<String, String> parsedList;
             try
             {
+                //Parse this file - each line in the file must have the following format:
+                //<URL><space><Filename>
                 parsedList = ConsoleApp.parseLinksFilePath(filePathField.getText());
             }
             catch(IOException exc)
             {
-                //exc.printStackTrace();
                 Dialogs.create().title("Error while trying to access file")
-                        .message("Some error happened: " + exc.getMessage()).showError();
+                        .message("Error has happened while trying to access file. " +
+                                "Make sure that it exists and is accessible.").showError();
                 return;
             }
             catch(Exception exc)
