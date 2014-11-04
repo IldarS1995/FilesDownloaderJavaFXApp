@@ -77,8 +77,9 @@ public class MultipleFilesDialog extends Dialog
         TableView<FileUrlName> view = new TableView<>();
         TableColumn urlCol = new TableColumn("URL");
         TableColumn nameCol = new TableColumn("File name");
-        urlCol.setMinWidth(150);
+        urlCol.setMinWidth(250);
         nameCol.setMinWidth(150);
+        view.setPrefHeight(300);
 
         urlCol.setCellValueFactory(new PropertyValueFactory<FileUrlName, String>("url"));
         nameCol.setCellValueFactory(new PropertyValueFactory<FileUrlName, String>("name"));
@@ -94,20 +95,28 @@ public class MultipleFilesDialog extends Dialog
 
         parseBtn.setOnAction((evt) ->
         {
+            Map<String, String> parsedList;
             try
             {
-                Map<String, String> parsedList = ConsoleApp.parseLinksFilePath(filePathField.getText());
-                this.files = parsedList;
-                list.clear();
-                parsedList.entrySet().stream().forEach((pair) ->
-                        list.add(new FileUrlName(pair.getKey(), pair.getValue())));
+                parsedList = ConsoleApp.parseLinksFilePath(filePathField.getText());
             }
             catch(IOException exc)
             {
-                exc.printStackTrace();
-                Dialogs.create().title("Error while trying to parse file")
+                //exc.printStackTrace();
+                Dialogs.create().title("Error while trying to access file")
                         .message("Some error happened: " + exc.getMessage()).showError();
+                return;
             }
+            catch(Exception exc)
+            {
+                Dialogs.create().title("Error in parsing file")
+                        .message("The format of the specified file isn't correct.").showError();
+                return;
+            }
+            this.files = parsedList;
+            list.clear();
+            parsedList.entrySet().stream().forEach((pair) ->
+                    list.add(new FileUrlName(pair.getKey(), pair.getValue())));
         });
 
         submitAction = new AbstractAction("Download files")
@@ -115,6 +124,13 @@ public class MultipleFilesDialog extends Dialog
             @Override
             public void handle(ActionEvent actionEvent)
             {
+                if(files == null)
+                {
+                    Dialogs.create().title("Submitting")
+                            .message("Please choose some file and parse it at first.").showError();
+                    return;
+                }
+                
                 Dialog d = (Dialog)actionEvent.getSource();
                 d.hide();
             }

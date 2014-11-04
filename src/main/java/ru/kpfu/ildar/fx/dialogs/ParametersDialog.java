@@ -47,7 +47,7 @@ public class ParametersDialog extends Dialog
         Label saveFolderLabel = new Label("Folder where to save downloaded files:");
 
         threadsField = new TextField(String.valueOf(parameters.getMaxThreadsAmount()));
-        speedField = new TextField(String.valueOf(parameters.getBytesPerSec()));
+        speedField = new TextField();
         saveFolderField = new TextField(String.valueOf(parameters.getFolderForFiles()));
 
         saveFolderField.setPrefWidth(200);
@@ -63,7 +63,25 @@ public class ParametersDialog extends Dialog
 
         box = new ComboBox<>();
         box.setItems(FXCollections.observableArrayList("bytes", "KBs", "MBs"));
-        box.getSelectionModel().select("bytes");
+        int speed = parameters.getBytesPerSec();
+        if(speed % 1024 == 0)
+        {
+            if((speed / 1024) % 1024 == 0)
+            {
+                box.getSelectionModel().select("MBs");
+                speedField.setText(String.valueOf(speed / 1024 / 1024));
+            }
+            else
+            {
+                box.getSelectionModel().select("KBs");
+                speedField.setText(String.valueOf(speed / 1024));
+            }
+        }
+        else
+        {
+            box.getSelectionModel().select("bytes");
+            speedField.setText(String.valueOf(speed));
+        }
 
         root.add(threadsLabel, 0, 0);
         root.add(threadsField, 1, 0);
@@ -79,6 +97,7 @@ public class ParametersDialog extends Dialog
             @Override
             public void handle(ActionEvent evt)
             {
+
                 parameters = new Parameters(getThreadsCount(), getBytesPerSec(), getFolderForFiles());
                 Dialog dial = (Dialog)evt.getSource();
                 dial.hide();
@@ -117,7 +136,7 @@ public class ParametersDialog extends Dialog
 
     private String getFolderForFiles()
     {
-        return saveFolderField.getText();
+        return saveFolderField.getText().replace("/", File.separator).replace("\\", File.separator);
     }
 
     private int getBytesPerSec()

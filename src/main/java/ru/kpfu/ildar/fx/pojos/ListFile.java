@@ -1,4 +1,4 @@
-package ru.kpfu.ildar.fx;
+package ru.kpfu.ildar.fx.pojos;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,8 +12,9 @@ public class ListFile
     private SimpleDoubleProperty progress;
     private SimpleDoubleProperty speed;
     private SimpleStringProperty state;
+    private SimpleStringProperty folderForFiles;
 
-    public ListFile(String url, String fileName)
+    public ListFile(String url, String fileName, String folderForFiles)
     {
         this.url = new SimpleStringProperty(url);
         this.fileName = new SimpleStringProperty(fileName);
@@ -21,10 +22,21 @@ public class ListFile
         this.progress = new SimpleDoubleProperty(0.0);
         this.speed = new SimpleDoubleProperty(0.0);
         this.state = new SimpleStringProperty(LinkFile.State.NotStarted.toString());
+        this.folderForFiles = new SimpleStringProperty(folderForFiles);
     }
-    public ListFile(LinkFile file)
+    public ListFile(LinkFile file, String folderForFiles)
     {
-        this(file.getUrl(), file.getSaveName());
+        this(file.getUrl(), file.getSaveName(), folderForFiles);
+    }
+
+    public String getFolderForFiles()
+    {
+        return folderForFiles.get();
+    }
+
+    public void setFolderForFiles(String folderForFiles)
+    {
+        this.folderForFiles.set(folderForFiles);
     }
 
     public String getUrl()

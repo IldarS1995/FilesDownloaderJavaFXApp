@@ -1,6 +1,7 @@
 package ru.kpfu.ildar.fx.dialogs;
 
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -65,14 +66,19 @@ public class DownloadFileDialog extends Dialog
                 d.hide();
             }
         };
+        submitAction.disabledProperty().set(true);
 
-        nameField.textProperty().addListener((obs, oldVal, newVal) ->
+        submitAction.disabledProperty().bind(new BooleanBinding()
         {
-            submitAction.disabledProperty().set(newVal.length() == 0);
-        });
-        urlField.textProperty().addListener((obs, oldVal, newVal) ->
-        {
-            submitAction.disabledProperty().set(newVal.length() == 0);
+            { super.bind(nameField.textProperty(), urlField.textProperty()); }
+
+            @Override
+            protected boolean computeValue()
+            {
+                String txt1 = nameField.getText();
+                String txt2 = urlField.getText();
+                return !(txt1.length() != 0 && txt2.length() != 0);
+            }
         });
 
         ButtonBar.setType(submitAction, ButtonBar.ButtonType.OK_DONE);
