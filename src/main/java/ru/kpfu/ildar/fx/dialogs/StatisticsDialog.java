@@ -13,6 +13,7 @@ public class StatisticsDialog extends Dialog
     private boolean resetStat = false;
     private Statistics statistics;
 
+    /** If true, reset statistics data. At the moment functionality isn't implemented. */
     public boolean isResetStatistics() { return resetStat; }
 
     public StatisticsDialog(Object owner, String title, Statistics statistics)
@@ -41,7 +42,7 @@ public class StatisticsDialog extends Dialog
         Label averSizeLabel = new Label("Average size of files in MBs:");
         Label speedLabel = new Label("Average downloading speed in KBs/sec:");
 
-        Text mbsDownloadedText = new Text(String.valueOf(statistics.getMbsLastDay()));
+        Text mbsDownloadedText = new Text(String.valueOf(floor(statistics.getMbsLastDay())));
         Text filesDownloadedText = new Text(String.valueOf(statistics.getFilesCountLastDay()));
         Text averSizeText = new Text(String.valueOf
                 (floor(statistics.getMbsAllTime() / statistics.getFilesCountAllTime())));
@@ -66,6 +67,7 @@ public class StatisticsDialog extends Dialog
         pane.add(speedLabel, 0, 3);
         pane.add(averSpeedText, 1, 3);
 
+        //Selected megabytes downloaded time range - in last day, in last week or in all time
         mbsBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
         {
             switch (newVal)
@@ -79,6 +81,7 @@ public class StatisticsDialog extends Dialog
             }
         });
 
+        //Selected files downloaded time range - in last day, in last week or in all time
         filesBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
         {
             switch (newVal)
